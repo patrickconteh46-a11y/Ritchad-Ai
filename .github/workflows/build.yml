@@ -1,4 +1,4 @@
-name: Build Ritchad AI
+name: Ritchad AI Build
 
 on:
   push:
@@ -11,17 +11,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Get source code
         uses: actions/checkout@v4
 
-      - name: Prepare files
+      - name: Check project
         run: |
-          mkdir -p build
-          cp -r . build/
-          rm -rf build/.git build/.github
+          echo "Ritchad AI build started"
+          ls -la
+
+      - name: Create build package
+        run: |
+          mkdir -p release
+          cp -r . release/
+          rm -rf release/.git
+          rm -rf release/release
 
       - name: Upload Ritchad AI
         uses: actions/upload-artifact@v4
         with:
-          name: ritchad-ai
-          path: build/
+          name: Ritchad-AI
+          path: release
