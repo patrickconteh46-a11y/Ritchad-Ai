@@ -1,28 +1,33 @@
+name: Build Ritchad AI
 
-name: Build APK
-on: [push, workflow_dispatch]
-permissions:
-  contents: write
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - name: Arrange files
-        run: |
-          mkdir -p app/src/main/java/com/ritchad/app
-          mv MainActivity.kt Brain.kt DeviceTools.kt app/src/main/java/com/ritchad/app/
-          mv AndroidManifest.xml app/src/main/
-          mv app-build.gradle.kts app/build.gradle.kts
-      - uses: actions/setup-java@v4
+      - name: Checkout project
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          distribution: temurin
-          java-version: 17
-      - uses: gradle/actions/setup-gradle@v4
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build application
+        run: npm run build
+
+      - name: Upload build
+        uses: actions/upload-artifact@v4
         with:
-          gradle-version: 8.9
-      - run: gradle assembleDebug --no-daemon
-      - uses: softprops/action-gh-release@v2
-        with:
-          tag_name: build-${{ github.run_number }}
-          files: app/build/outputs/apk/debug/app-debug.apk
+          name: ritchad-ai-build
+          path: dist/
