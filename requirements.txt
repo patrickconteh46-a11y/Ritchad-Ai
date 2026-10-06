@@ -1,0 +1,1 @@
+fastapi>=0.115\nuvicorn[standard]>=0.30\nopenai>=1.40\npython-multipart>=0.0.9\npython-dotenv>=1.0\n
