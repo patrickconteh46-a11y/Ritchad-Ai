@@ -1,33 +1,25 @@
 name: Ritchad AI Build
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Get source code
+      - name: Checkout Ritchad AI
         uses: actions/checkout@v4
 
-      - name: Check project
+      - name: Create Ritchad AI package
         run: |
-          echo "Ritchad AI build started"
-          ls -la
-
-      - name: Create build package
-        run: |
-          mkdir -p release
-          cp -r . release/
-          rm -rf release/.git
-          rm -rf release/release
+          git archive --format=zip --output=Ritchad-AI.zip HEAD
 
       - name: Upload Ritchad AI
         uses: actions/upload-artifact@v4
         with:
           name: Ritchad-AI
-          path: release
+          path: Ritchad-AI.zip
