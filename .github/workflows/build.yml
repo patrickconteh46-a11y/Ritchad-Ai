@@ -1,4 +1,4 @@
-name: Ritchad AI Build
+name: Build Ritchad AI APK
 
 on:
   workflow_dispatch:
@@ -11,15 +11,42 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Ritchad AI
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Create Ritchad AI package
-        run: |
-          git archive --format=zip --output=Ritchad-AI.zip HEAD
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
 
-      - name: Upload Ritchad AI
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Create web project
+        run: |
+          npm init -y
+          npm install @capacitor/core @capacitor/cli @capacitor/android
+
+      - name: Initialize Capacitor
+        run: |
+          npx cap init "Ritchad AI" "com.ritchad.ai" --web-dir=.
+
+      - name: Create Android project
+        run: |
+          npx cap add android
+          npx cap sync android
+
+      - name: Build APK
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Ritchad-AI
-          path: Ritchad-AI.zip
+          name: Ritchad-AI-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk
