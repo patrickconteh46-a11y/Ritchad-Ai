@@ -1,5 +1,4 @@
-
-          name: Ritchad AI Build
+name: Ritchad AI Build
 
 on:
   workflow_dispatch:
