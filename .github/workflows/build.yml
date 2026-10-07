@@ -1,4 +1,3 @@
-
 name: Build APK
 on: [push, workflow_dispatch]
 jobs:
@@ -9,7 +8,6 @@ jobs:
       - run: unzip -q RitchadPA-android-project.zip
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: 17 }
-      - uses: android-actions/setup-android@v3
       - uses: gradle/actions/setup-gradle@v4
         with: { gradle-version: 8.7 }
       - run: gradle assembleDebug --no-daemon
